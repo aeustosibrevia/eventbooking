@@ -1,31 +1,23 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  ParseIntPipe,
-} from '@nestjs/common';
-import * as eventsService_1 from './events.service';
+import { Controller, Get, Post, Body, Param, ParseIntPipe } from '@nestjs/common';
+import { EventsService } from './events.service';
+import { Event } from './event.entity';
 
 @Controller('events')
 export class EventsController {
-  constructor(private readonly eventsService: eventsService_1.EventsService) {}
+    constructor(private readonly eventsService: EventsService) {}
 
-  @Post()
-  create(
-    @Body() eventData: { title: string; date: string; location: string },
-  ): eventsService_1.Event {
-    return this.eventsService.create(eventData);
-  }
+    @Post()
+    async create(@Body() eventData: { title: string; date: string; location: string }): Promise<Event> {
+        return this.eventsService.create(eventData);
+    }
 
-  @Get()
-  findAll(): eventsService_1.Event[] {
-    return this.eventsService.findAll();
-  }
+    @Get()
+    async findAll(): Promise<Event[]> {
+        return this.eventsService.findAll();
+    }
 
-  @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number): eventsService_1.Event {
-    return this.eventsService.findOne(id);
-  }
+    @Get(':id')
+    async findOne(@Param('id', ParseIntPipe) id: number): Promise<Event> {
+        return this.eventsService.findOne(id);
+    }
 }

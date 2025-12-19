@@ -1,31 +1,23 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  ParseIntPipe,
-} from '@nestjs/common';
-import * as usersService_1 from './users.service';
+import { Controller, Get, Post, Body, Param, ParseIntPipe } from '@nestjs/common';
+import { UsersService } from './users.service';
+import { User } from './user.entity';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: usersService_1.UsersService) {}
+    constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  create(
-    @Body() userData: { name: string; email: string },
-  ): usersService_1.User {
-    return this.usersService.create(userData);
-  }
+    @Post()
+    async create(@Body() userData: { name: string; email: string }): Promise<User> {
+        return this.usersService.create(userData);
+    }
 
-  @Get()
-  findAll(): usersService_1.User[] {
-    return this.usersService.findAll();
-  }
+    @Get()
+    async findAll(): Promise<User[]> {
+        return this.usersService.findAll();
+    }
 
-  @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number): usersService_1.User {
-    return this.usersService.findOne(id);
-  }
+    @Get(':id')
+    async findOne(@Param('id', ParseIntPipe) id: number): Promise<User> {
+        return this.usersService.findOne(id);
+    }
 }

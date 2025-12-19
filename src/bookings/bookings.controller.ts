@@ -1,35 +1,23 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  ParseIntPipe,
-} from '@nestjs/common';
-import * as bookingsService_1 from './bookings.service';
+import { Controller, Get, Post, Body, Param, ParseIntPipe } from '@nestjs/common';
+import { BookingsService } from './bookings.service';
+import { Booking } from './booking.entity';
 
 @Controller('bookings')
 export class BookingsController {
-  constructor(
-    private readonly bookingsService: bookingsService_1.BookingsService,
-  ) {}
+    constructor(private readonly bookingsService: BookingsService) {}
 
-  @Post()
-  create(
-    @Body() bookingData: { userId: number; eventId: number },
-  ): bookingsService_1.Booking {
-    return this.bookingsService.create(bookingData);
-  }
+    @Post()
+    async create(@Body() bookingData: { userId: number; eventId: number }): Promise<Booking> {
+        return this.bookingsService.create(bookingData);
+    }
 
-  @Get()
-  findAll(): bookingsService_1.Booking[] {
-    return this.bookingsService.findAll();
-  }
+    @Get()
+    async findAll(): Promise<Booking[]> {
+        return this.bookingsService.findAll();
+    }
 
-  @Get('event/:eventId')
-  findByEvent(
-    @Param('eventId', ParseIntPipe) eventId: number,
-  ): bookingsService_1.Booking[] {
-    return this.bookingsService.findByEvent(eventId);
-  }
+    @Get('event/:eventId')
+    async findByEvent(@Param('eventId', ParseIntPipe) eventId: number): Promise<Booking[]> {
+        return this.bookingsService.findByEvent(eventId);
+    }
 }
